@@ -8,9 +8,10 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        var input = scanner.nextLine();
+        var input = "_________";//scanner.nextLine();
         char[][] matrix = printTable(input.toCharArray());
 
+        char lastChar = 'X';
 
         while (true) {
             input = scanner.nextLine();
@@ -22,13 +23,21 @@ public class Main {
             if(IsMatrixOccupied(cells[0], cells[1], matrix))
                 continue;
 
-            matrix[cells[0]][cells[1]] = 'X';
+            matrix[cells[0]][cells[1]] = lastChar;
+            lastChar = lastChar == 'X' ? 'O' : 'X';
 
             printTable(matrix);
-            break;
+
+            var status = getState(matrix);
+
+            if(status.contains("wins") || status.contains("Draw")) {
+                System.out.println(status);
+                break;
+            }
+
         }
 
-        /*System.out.println(getState(matrix));*/
+        /*System.out.println();*/
 
     }
 
@@ -122,14 +131,14 @@ public class Main {
             var a = matrix[i][0];
             var b = matrix[i][1];
             var c = matrix[i][2];
-            if (a == b && b == c)
+            if (a == b && b == c && c != '_')
                 state = String.format("%c wins", a);
 
             // columns
             a = matrix[0][i];
             b = matrix[1][i];
             c = matrix[2][i];
-            if (a == b && b == c)
+            if (a == b && b == c && c != '_')
                 if (state.equals("")) {
                     state = String.format("%c wins", a);
                 } else {
@@ -140,7 +149,7 @@ public class Main {
         var a = matrix[0][0];
         var b = matrix[1][1];
         var c = matrix[2][2];
-        if (a == b && b == c)
+        if (a == b && b == c && c != '_')
             if (state.equals("")) {
                 state = String.format("%c wins", a);
             } else {
@@ -150,7 +159,7 @@ public class Main {
         a = matrix[0][2];
         b = matrix[1][1];
         c = matrix[2][0];
-        if (a == b && b == c)
+        if (a == b && b == c && c != '_')
             if (state.equals("")) {
                 state = String.format("%c wins", a);
             } else {
